@@ -36,7 +36,7 @@ app.use(limiter);
 
 // DataBase Connection 
 
-let URL = "mongodb+srv://compassAdmin2:nXw7lwGEQqL2TVGl@cluster0.bpilnp1.mongodb.net/Todo";
+let URL = "mongodb+srv://compassAdmin2:nXw7lwGEQqL2TVGl@cluster0.bpilnp1.mongodb.net/Tutor";
 let Option = { autoIndex: true };
 
 mongoose.connect(URL, Option)
