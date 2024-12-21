@@ -14,11 +14,11 @@ exports.CreateProfile = async (req, res) => {
 
 
 exports.UserLogin = async (req, res) => {
-  const { UserName, Password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Find user by UserName and Password 
-    const data = await ProfileModel.find({ UserName: UserName, Password: Password });
+    const data = await ProfileModel.find({ email: email, password: password });
 
     if (data.length > 0) {
       
@@ -34,24 +34,14 @@ exports.UserLogin = async (req, res) => {
 }
 
 
-// exports.SelectProfile = (req, res) => {
-//   let UserName = "admin";
-//   ProfileModel.find({ UserName: UserName }, (err, data) => {
-//     if (err) {
-//       res.status(400).json({ status: "fail", data: err });
-//     }
-//     else {
-//       res.status(200).json({ status: "success", data: data });
-//     }
-//   })
-// }
+
 
 
 exports.SelectProfile = async (req, res) => {
-  let UserName = req.headers['username'];
+  let email = req.headers['email'];
 
   try {
-    const data = await ProfileModel.find({ UserName });
+    const data = await ProfileModel.find({ email });
     res.status(200).json({ status: "success", data: data });
   } catch (err) {
     res.status(400).json({ status: "fail", data: err.message });
@@ -60,17 +50,17 @@ exports.SelectProfile = async (req, res) => {
 
 
 exports.UpdateProfile = async (req, res) => {
-  const UserName = req.headers['username']; // Extract UserName from headers
+  const email = req.headers['email']; // Extract UserName from headers
   const reqBody = req.body; // Extract update data from request body
 
-  if (!UserName) {
-    return res.status(400).json({ status: "fail", message: "Username is required in headers" });
+  if (!email) {
+    return res.status(400).json({ status: "fail", message: "email is required in headers" });
   }
 
   try {
-    // Update the profile based on UserName
+    // Update the profile based on email
     const updatedProfile = await ProfileModel.findOneAndUpdate(
-      { UserName },        // Find the profile with this UserName
+      { email },        // Find the profile with this email
       { $set: reqBody },   // Set the updated fields
       { new: true }        // Return the updated document
     );
