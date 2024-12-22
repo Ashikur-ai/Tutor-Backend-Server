@@ -6,6 +6,7 @@ const AuthVerifyMiddleware = require("../middleware/AuthVerifyMiddleware");
 const { PostNeedTutor, SelectNeedTutor, SelectNeedTutorById, UpdateNeedTutor, DeleteNeedTutor } = require('../controllers/NeedTutorController');
 const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile } = require('../controllers/TutorProfileController');
 const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuardianProfile } = require('../controllers/GuardianProfileController');
+const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById } = require('../controllers/JobPostController');
 
 
 
@@ -44,5 +45,18 @@ router.get("/SelectNeedTutorById/:id", AuthVerifyMiddleware, SelectNeedTutorById
 router.put("/UpdateNeedTutor/:id", AuthVerifyMiddleware, UpdateNeedTutor);
 
 router.delete("/DeleteNeedTutor/:id", AuthVerifyMiddleware, DeleteNeedTutor);
+
+
+
+// Create Job Post related api 
+
+router.post("/CreateJobPost", AuthVerifyMiddleware, CreateJobPost);
+router.get("/GetAllJobPost", AuthVerifyMiddleware, GetAllJobPost);
+router.get("/SelectJobPostById/:id", AuthVerifyMiddleware, SelectJobPostById);
+
+router.post("/UpdateJobPostById/:id", AuthVerifyMiddleware, UpdateJobPostById);
+
+router.delete("/DeleteJobPostById/:id", AuthVerifyMiddleware, DeleteJobPostById);
+
 
 module.exports = router;
