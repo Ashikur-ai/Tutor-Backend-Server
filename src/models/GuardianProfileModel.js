@@ -2,21 +2,19 @@ const mongoose = require('mongoose');
 
 const GuardianSchema = new mongoose.Schema({
   email: { type: String, unique: true },
-  password: { type: String },
-  Name: { type: String, required: true },
-  ContactNo: { type: Number, required: true },
-  Email: { type: String, required: true },
-  Gender: { type: String },
-  FacebookId: { type: String },
-  City: { type: String },
-  Location: { type: String },
-  DetailsAddress: { type: String },
-  Profession: { type: String },
-  HearAboutUs: { type: String },
-  RefName: { type: String },
-  RefContactNo: { type: String },
-  Relation: { type: String },
-  FullAddress: { type: String }
+  name: { type: String},
+  contactNo: { type: String },
+  gender: { type: String },
+  facebookId: { type: String },
+  city: { type: String },
+  location: { type: String },
+  detailsAddress: { type: String },
+  profession: { type: String },
+  hearAboutUs: { type: String },
+  refName: { type: String },
+  refContactNo: { type: String },
+  relation: { type: String },
+  fullAddress: { type: String }
 }, {
   versionKey: false,
   timestamps: true

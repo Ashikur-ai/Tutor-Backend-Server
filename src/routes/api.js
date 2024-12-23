@@ -7,6 +7,7 @@ const { PostNeedTutor, SelectNeedTutor, SelectNeedTutorById, UpdateNeedTutor, De
 const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile } = require('../controllers/TutorProfileController');
 const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuardianProfile } = require('../controllers/GuardianProfileController');
 const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById } = require('../controllers/JobPostController');
+const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
 
 
 
@@ -57,6 +58,16 @@ router.get("/SelectJobPostById/:id", AuthVerifyMiddleware, SelectJobPostById);
 router.post("/UpdateJobPostById/:id", AuthVerifyMiddleware, UpdateJobPostById);
 
 router.delete("/DeleteJobPostById/:id", AuthVerifyMiddleware, DeleteJobPostById);
+
+
+// Admin Work Related Api 
+router.get("/GetAllUser", AuthVerifyMiddleware, GetAllUser);
+router.get("/GetAllGuardian", AuthVerifyMiddleware, GetAllGuardian);
+router.get("/GetAllTutor", AuthVerifyMiddleware, GetAllTutor);
+router.post("/verifyUser/:id", AuthVerifyMiddleware, VerifyUser);
+router.post("/updateRole/:id", AuthVerifyMiddleware, UpdateRole);
+
+
 
 
 module.exports = router;
