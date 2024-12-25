@@ -6,7 +6,7 @@ const AuthVerifyMiddleware = require("../middleware/AuthVerifyMiddleware");
 const { PostNeedTutor, SelectNeedTutor, SelectNeedTutorById, UpdateNeedTutor, DeleteNeedTutor } = require('../controllers/NeedTutorController');
 const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile } = require('../controllers/TutorProfileController');
 const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuardianProfile } = require('../controllers/GuardianProfileController');
-const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById } = require('../controllers/JobPostController');
+const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById, GetJobPostsByDateRange, GetJobPostsByTuitionType, GetJobPostsBySubject, GetJobPostsByPreferredTeacherGender, GetJobPostsByPreferredStudentGender } = require('../controllers/JobPostController');
 const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
 const { AddLocation, GetAllLocation, DeleteLocationById } = require('../controllers/LocationController');
 
@@ -59,6 +59,13 @@ router.get("/SelectJobPostById/:id", AuthVerifyMiddleware, SelectJobPostById);
 router.post("/UpdateJobPostById/:id", AuthVerifyMiddleware, UpdateJobPostById);
 
 router.delete("/DeleteJobPostById/:id", AuthVerifyMiddleware, DeleteJobPostById);
+
+router.post("/GetJobPostsByDateRange", GetJobPostsByDateRange);
+router.post("/GetJobPostsByTuitionType", GetJobPostsByTuitionType);
+router.post("/GetJobPostsBySubject", GetJobPostsBySubject);
+router.post("/GetJobPostsByPreferredTeacherGender", GetJobPostsByPreferredTeacherGender);
+router.post("/GetJobPostsByPreferredStudentGender", GetJobPostsByPreferredStudentGender);
+
 
 
 // Admin Work Related Api 

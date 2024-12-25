@@ -102,3 +102,143 @@ exports.DeleteJobPostById = async (req, res) => {
 
 
 }
+
+
+
+// filter method
+exports.GetJobPostsByDateRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.body; // Fetch dates from the request body
+
+    // Validate input
+    if (!startDate || !endDate) {
+      return res.status(400).json({ status: 'fail', message: 'Both startDate and endDate are required' });
+    }
+
+    // Parse the dates to ensure proper handling
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ status: 'fail', message: 'Invalid date format' });
+    }
+
+    // Query the database for job posts within the date range
+    const data = await JobPostModel.find({
+      createdAt: { $gte: start, $lte: end }, // Assuming `createdAt` is a timestamp field
+    });
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+exports.GetJobPostsByTuitionType = async (req, res) => {
+  try {
+    const { TuitionType } = req.body; // Get TuitionType from request body
+
+    // Validate input
+    if (!TuitionType) {
+      return res.status(400).json({ status: 'fail', message: 'TuitionType is required' });
+    }
+
+    // Query to filter job posts by TuitionType
+    const data = await JobPostModel.find({ TuitionType });
+
+    if (data.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No job posts found for TuitionType: ${TuitionType}`,
+      });
+    }
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+
+exports.GetJobPostsBySubject = async (req, res) => {
+  try {
+    const { subjectName } = req.body; // Get the subject name from request body
+
+    // Validate input
+    if (!subjectName) {
+      return res.status(400).json({ status: 'fail', message: 'Subject name is required' });
+    }
+
+    // Query to filter job posts by subject
+    const data = await JobPostModel.find({
+      Subject: {
+        $elemMatch: { name: subjectName } // Match subject by name
+      }
+    });
+
+    if (data.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No job posts found for subject: ${subjectName}`,
+      });
+    }
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+
+exports.GetJobPostsByPreferredTeacherGender = async (req, res) => {
+  try {
+    const { preferredGender } = req.body; // Get preferred gender from request body
+
+    // Validate input
+    if (!preferredGender) {
+      return res.status(400).json({ status: 'fail', message: 'Preferred gender is required' });
+    }
+
+    // Query to filter job posts by preferred gender
+    const data = await JobPostModel.find({ PreferedGender_Teacher: preferredGender });
+
+    if (data.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No job posts found for preferred teacher gender: ${preferredGender}`,
+      });
+    }
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+
+exports.GetJobPostsByPreferredStudentGender = async (req, res) => {
+  try {
+    const { preferredStudentGender } = req.body; // Get preferred student gender from request body
+
+    // Validate input
+    if (!preferredStudentGender) {
+      return res.status(400).json({ status: 'fail', message: 'Preferred student gender is required' });
+    }
+
+    // Query to filter job posts by preferred student gender
+    const data = await JobPostModel.find({ PreferedGender_Student: preferredStudentGender });
+
+    if (data.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No job posts found for preferred student gender: ${preferredStudentGender}`,
+      });
+    }
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+
