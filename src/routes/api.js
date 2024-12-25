@@ -8,6 +8,7 @@ const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile }
 const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuardianProfile } = require('../controllers/GuardianProfileController');
 const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById } = require('../controllers/JobPostController');
 const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
+const { AddLocation, GetAllLocation, DeleteLocationById } = require('../controllers/LocationController');
 
 
 
@@ -67,6 +68,11 @@ router.get("/GetAllTutor", AuthVerifyMiddleware, GetAllTutor);
 router.post("/verifyUser/:id", AuthVerifyMiddleware, VerifyUser);
 router.post("/updateRole/:id", AuthVerifyMiddleware, UpdateRole);
 
+
+// Location related api 
+router.post("/AddLocation", AddLocation);
+router.get("/GetAllLocation", GetAllLocation);
+router.get("/DeleteLocationById/:id", DeleteLocationById);
 
 
 
