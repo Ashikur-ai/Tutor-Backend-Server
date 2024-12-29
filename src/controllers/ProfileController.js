@@ -1,5 +1,7 @@
+const GuardianProfileModel = require("../models/GuardianProfileModel");
 const ProfileModel = require("../models/ProfileModel");
 let jwt = require('jsonwebtoken');
+const TutorProfileModel = require("../models/TutorProfileModel");
 
 exports.CreateProfile = async (req, res) => {
   try {
@@ -32,6 +34,61 @@ exports.UserLogin = async (req, res) => {
     res.status(400).json({ status: 'fail', data: err.message });
   }
 }
+
+
+
+// updated register function 
+exports.RegisterUser = async (req, res) => {
+  try {
+    const role = req.params.role; // Extract role from request parameters
+    const reqBody = req.body; // Extract user details from request body
+
+    // Validate role
+    const validRoles = ["guardian", "tutor", ""]; // List of allowed roles
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        status: "fail",
+        message: `Invalid role. Allowed roles are: ${validRoles.join(", ")}`,
+      });
+    }
+
+    // Create the user profile in the main ProfileModel
+    const userProfile = await ProfileModel.create({ ...reqBody, role });
+
+    // Add the user to the respective role-based model
+    if (role === "guardian") {
+      await GuardianProfileModel.create({
+        name: userProfile.name,
+        email: userProfile.email,
+        phone: userProfile.phone,
+        location: userProfile.location,
+        city: userProfile.city,
+      });
+    } else if (role === "tutor") {
+      await TutorProfileModel.create({
+        name: userProfile.name,
+        email: userProfile.email,
+        phone: userProfile.phone,
+        location: userProfile.location,
+        city: userProfile.city,
+      });
+    }
+
+    // Generate a JWT token
+    const payload = { exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, data: userProfile };
+    const token = jwt.sign(payload, "SecretKey122354235234");
+
+    res.status(200).json({
+      status: "success",
+      message: `User registered successfully with role '${role}'`,
+      token: token,
+      data: userProfile,
+    });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: err.message });
+  }
+};
+
 
 
 

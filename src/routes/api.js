@@ -14,6 +14,8 @@ const { AddLocation, GetAllLocation, DeleteLocationById } = require('../controll
 
 // Admin Profile related api 
 router.post("/CreateProfile", ProfileController.CreateProfile);
+router.post("/RegisterUser/:role", ProfileController.RegisterUser);
+
 router.post("/UserLogin", ProfileController.UserLogin);
 router.get("/SelectProfile", AuthVerifyMiddleware, ProfileController.SelectProfile);
 router.post("/UpdateProfile", AuthVerifyMiddleware, ProfileController.UpdateProfile);
