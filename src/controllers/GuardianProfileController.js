@@ -39,8 +39,12 @@ exports.SelectGuardianProfile = async (req, res) => {
   let email = req.headers['email'];
 
   try {
-    const data = await GuardianProfileModel.find({ email });
-    res.status(200).json({ status: "success", data: data });
+    const data = await GuardianProfileModel.find({ email }).populate('profile');
+    if (data.length > 0) {
+      res.status(200).json({ status: "success", data: data });
+    } else {
+      res.status(404).json({ status: "Not Found. Login As Guardian", data: data });
+    }
   } catch (err) {
     res.status(400).json({ status: "fail", data: err.message });
   }

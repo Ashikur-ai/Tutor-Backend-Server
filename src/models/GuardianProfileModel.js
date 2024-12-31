@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 
 const GuardianSchema = new mongoose.Schema({
+  profile: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile'},
   email: { type: String, unique: true },
-  name: { type: String},
-  contactNo: { type: String },
-  gender: { type: String },
   facebookId: { type: String },
-  city: { type: String },
-  location: { type: String },
   detailsAddress: { type: String },
   profession: { type: String },
   hearAboutUs: { type: String },
