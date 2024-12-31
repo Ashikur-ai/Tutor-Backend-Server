@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 
 const TutorSchema = new mongoose.Schema({
+  profile: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
   email: { type: String, unique: true },
-  password: {type: String},
   tutoringTimeTo: { type: String },
   tutoringTimeFrom: { type: String },
-  city: { type: String },
-  location: { type: String },
   expectedSalary: { type: String },
   tutoringStyles: { type: String },
   preferredLocations: { type: String },

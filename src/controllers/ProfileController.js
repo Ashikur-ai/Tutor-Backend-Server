@@ -58,19 +58,15 @@ exports.RegisterUser = async (req, res) => {
     // Add the user to the respective role-based model
     if (role === "guardian") {
       await GuardianProfileModel.create({
-        name: userProfile.name,
+        profile: userProfile._id,
         email: userProfile.email,
-        phone: userProfile.phone,
-        location: userProfile.location,
-        city: userProfile.city,
+        
       });
     } else if (role === "tutor") {
       await TutorProfileModel.create({
-        name: userProfile.name,
+        profile: userProfile._id,
         email: userProfile.email,
-        phone: userProfile.phone,
-        location: userProfile.location,
-        city: userProfile.city,
+       
       });
     }
 
