@@ -2,6 +2,7 @@ const GuardianProfileModel = require("../models/GuardianProfileModel");
 const ProfileModel = require("../models/ProfileModel");
 let jwt = require('jsonwebtoken');
 const TutorProfileModel = require("../models/TutorProfileModel");
+const TutorAdditionalInfoModel = require("../models/TutorAdditionalInfoModel");
 
 exports.CreateProfile = async (req, res) => {
   try {
@@ -63,7 +64,7 @@ exports.RegisterUser = async (req, res) => {
         
       });
     } else if (role === "tutor") {
-      await TutorProfileModel.create({
+      await TutorAdditionalInfoModel.create({
         profile: userProfile._id,
         email: userProfile.email,
        
