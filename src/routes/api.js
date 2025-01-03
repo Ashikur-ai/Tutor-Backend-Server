@@ -4,7 +4,7 @@ const router = express.Router();
 const ProfileController = require("../controllers/ProfileController");
 const AuthVerifyMiddleware = require("../middleware/AuthVerifyMiddleware");
 const { PostNeedTutor, SelectNeedTutor, SelectNeedTutorById, UpdateNeedTutor, DeleteNeedTutor } = require('../controllers/NeedTutorController');
-const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile } = require('../controllers/TutorProfileController');
+const { CreateTutorProfile, TutorLogin, SelectTutorProfile, UpdateTutorProfile, UpdateTutorInfo } = require('../controllers/TutorProfileController');
 const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuardianProfile } = require('../controllers/GuardianProfileController');
 const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById, GetJobPostsByDateRange, GetJobPostsByTuitionType, GetJobPostsBySubject, GetJobPostsByPreferredTeacherGender, GetJobPostsByPreferredStudentGender } = require('../controllers/JobPostController');
 const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
@@ -36,6 +36,7 @@ router.post("/TutorLogin", TutorLogin);
 router.get("/SelectTutorProfile", AuthVerifyMiddleware, SelectTutorProfile);
 
 router.post("/UpdateTutorProfile", AuthVerifyMiddleware, UpdateTutorProfile);
+router.put("/UpdateTutorInfo", AuthVerifyMiddleware, UpdateTutorInfo);
 
 
 
