@@ -1,3 +1,4 @@
+const GuardianProfileModel = require("../models/GuardianProfileModel");
 const JobAppliedModel = require("../models/JobAppliedModel");
 
 exports.applyForJob = async (req, res) => {
@@ -169,3 +170,78 @@ exports.confirmTutor = async (req, res) => {
   }
 };
 
+
+exports.getAllJobApplications = async (req, res) => {
+  try {
+    // Fetch all job applications and populate the required fields
+    const jobApplications = await JobAppliedModel.find()
+      .populate('jobId') // Populates JobPostModel details
+      .populate('confirmedId') // Populates confirmed tutor info
+      .populate('appointedIds') // Populates appointed tutors
+      .populate('tutorIds'); // Populates tutors
+
+    // Transform each application and include guardianInfo
+    const enrichedApplications = await Promise.all(
+      jobApplications.map(async (application) => {
+        // Convert to plain JS object
+        const appObj = application.toObject();
+
+        // Fetch and attach guardian info if jobId and email exist
+        if (appObj.jobId && appObj.jobId.email) {
+          const guardianInfo = await GuardianProfileModel.findOne({
+            email: appObj.jobId.email,
+          });
+          appObj.guardianInfo = guardianInfo || null; // Attach or set to null if not found
+        }
+
+        return appObj; // Return enriched application
+      })
+    );
+
+    // Return response with enriched data
+    res.status(200).json({
+      success: true,
+      data: enrichedApplications,
+    });
+  } catch (error) {
+    console.error('Error fetching job applications:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching job applications',
+    });
+  }
+};
+
+
+
+
+
+//   try {
+//     // Fetch job applications and populate fields
+//     const jobApplications = await JobAppliedModel.find()
+//       .populate('jobId') // Populate job details
+//       .populate('confirmedId') // Populate confirmed tutor info
+//       .populate('appointedIds') // Populate appointed tutors
+//       .populate('tutorIds') // Populate tutor IDs
+//       .lean(); // Converts documents to plain JavaScript objects for easier handling
+
+//     // Iterate through applications to fetch guardian info based on jobId.email
+//     for (let application of jobApplications) {
+//       if (application.jobId && application.jobId.email) {
+//         const guardianInfo = await GuardianProfileModel.findOne({ email: application.jobId.email });
+//         application.guardianInfo = guardianInfo; // Attach guardian info to each application
+//       }
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: jobApplications,
+//     });
+//   } catch (error) {
+//     console.error('Error fetching job applications:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Server error while fetching job applications',
+//     });
+//   }
+// };
