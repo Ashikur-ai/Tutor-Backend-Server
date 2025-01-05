@@ -119,7 +119,16 @@ exports.UpdateTutorInfo = async (req, res) => {
         email,
         categoryRelated: { [category]: categoryRelated },
       });
+
+      // Calculate initial percentage
+      newTutorInfo.percentage = calculateOverallPercentage(
+        newTutorInfo.categoryRelated
+      );
+
+      newTutorInfo.status = newTutorInfo.percentage === 100 ? 'complete' : 'incomplete';
+
       await newTutorInfo.save();
+
       return res.status(201).json({
         status: 'success',
         message: `Tutor information for category '${category}' created successfully`,
@@ -130,12 +139,8 @@ exports.UpdateTutorInfo = async (req, res) => {
     // Update the specific category data without overwriting others
     tutorInfo.categoryRelated[category] = categoryRelated;
 
-    // Recalculate completion percentage for the updated category
-    const totalFields = Object.keys(categoryRelated).length;
-    const filledFields = Object.values(categoryRelated).filter(
-      (value) => value !== null && value !== ''
-    ).length;
-    tutorInfo.percentage = Math.floor((filledFields / totalFields) * 100);
+    // Recalculate overall completion percentage
+    tutorInfo.percentage = calculateOverallPercentage(tutorInfo.categoryRelated);
 
     // Update status based on percentage
     tutorInfo.status = tutorInfo.percentage === 100 ? 'complete' : 'incomplete';
@@ -155,4 +160,30 @@ exports.UpdateTutorInfo = async (req, res) => {
     });
   }
 };
+
+// Helper function to calculate overall completion percentage
+function calculateOverallPercentage(categoryRelated) {
+  const categories = Object.values(categoryRelated);
+
+  // Count total fields across all categories
+  const totalFields = categories.reduce((acc, category) => {
+    if (category && typeof category === 'object') {
+      acc += Object.keys(category).length;
+    }
+    return acc;
+  }, 0);
+
+  // Count filled fields across all categories
+  const filledFields = categories.reduce((acc, category) => {
+    if (category && typeof category === 'object') {
+      acc += Object.values(category).filter(
+        (value) => value !== null && value !== ''
+      ).length;
+    }
+    return acc;
+  }, 0);
+
+  // Avoid division by zero
+  return totalFields > 0 ? Math.floor((filledFields / totalFields) * 100) : 0;
+}
 

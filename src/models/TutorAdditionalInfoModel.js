@@ -10,7 +10,11 @@ const CategoryRelatedSchema = new mongoose.Schema({
 });
 
 const EducationRelatedSchema = new mongoose.Schema({
-  levelOfEducation: { type: String },
+  levelOfEducation: {
+    type: String,
+    enum: ['PhD', 'Masters', 'Bachelors', 'HSC', 'SSC', 'JSC'], // Restrict to these values
+    required: false,
+  },
   curriculum: { type: String },
   examDegreeTitle: { type: String },
   idCard: { type: String },

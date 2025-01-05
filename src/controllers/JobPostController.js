@@ -30,7 +30,7 @@ exports.CreateJobPost = async (req, res) => {
 exports.GetAllJobPost = async (req, res) => {
   let email = req.headers['email'];
 
-  console.log(email);
+  // console.log(email);
 
   try {
     const data = await JobPostModel.find({ email });

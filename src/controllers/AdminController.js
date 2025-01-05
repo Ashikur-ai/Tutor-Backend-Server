@@ -1,5 +1,6 @@
 const GuardianProfileModel = require("../models/GuardianProfileModel");
 const ProfileModel = require("../models/ProfileModel");
+const TutorAdditionalInfoModel = require("../models/TutorAdditionalInfoModel");
 const TutorProfileModel = require("../models/TutorProfileModel");
 
 exports.GetAllUser = async (req, res) => {
@@ -26,7 +27,7 @@ exports.GetAllGuardian = async (req, res) => {
 exports.GetAllTutor = async (req, res) => {
 
   try {
-    const data = await TutorProfileModel.find();
+    const data = await TutorAdditionalInfoModel.find();
     res.status(200).json({ status: "success", data: data });
   } catch (err) {
     res.status(400).json({ status: "fail", data: err.message });

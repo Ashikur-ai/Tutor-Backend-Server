@@ -58,7 +58,7 @@ exports.SelectNeedTutorById = async (req, res) => {
 exports.UpdateNeedTutor = async (req, res) => {
   const data = req.body;
   let id = req.params.id;
-  console.log(id);
+  // console.log(id);
   try {
     const result = await NeedTutorModel.findOneAndUpdate(
       { _id:id },

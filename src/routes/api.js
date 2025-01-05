@@ -9,7 +9,7 @@ const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuard
 const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById, GetJobPostsByDateRange, GetJobPostsByTuitionType, GetJobPostsBySubject, GetJobPostsByPreferredTeacherGender, GetJobPostsByPreferredStudentGender } = require('../controllers/JobPostController');
 const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
 const { AddLocation, GetAllLocation, DeleteLocationById } = require('../controllers/LocationController');
-const { applyForJob, appointTutor, confirmTutor } = require('../controllers/JobAppliedController');
+const { applyForJob, appointTutor, confirmTutor, getAllJobApplications } = require('../controllers/JobAppliedController');
 
 
 
@@ -90,6 +90,6 @@ router.get("/DeleteLocationById/:id", DeleteLocationById);
 router.post("/applyForJob", AuthVerifyMiddleware, applyForJob);
 router.post("/appointTutor", AuthVerifyMiddleware, appointTutor);
 router.post("/confirmTutor", AuthVerifyMiddleware, confirmTutor);
-
+router.get("/getAllJobApplications", AuthVerifyMiddleware, getAllJobApplications);
 
 module.exports = router;

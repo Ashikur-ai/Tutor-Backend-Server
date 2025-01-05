@@ -12,21 +12,27 @@ const JobAppliedSchema = new mongoose.Schema(
   {
     jobId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'JobPostModel',
+      ref: 'JobPost', // Reference to JobPostModel
       required: true,
     },
     confirmedId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'TutorAdditionalInfo', // Reference to TutorAdditionalInfo
       default: null,
     },
-    appointedIds: {
-      type: [mongoose.Schema.Types.ObjectId],
-      default: [],
-    },
-    tutorIds: {
-      type: [mongoose.Schema.Types.ObjectId],
-      required: true,
-    },
+    appointedIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TutorAdditionalInfo', // Reference to TutorAdditionalInfo
+      },
+    ],
+    tutorIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TutorAdditionalInfo', // Reference to TutorAdditionalInfo
+        required: true,
+      },
+    ],
     status: {
       type: String,
       enum: Object.values(JobApplicationStatus),
@@ -38,9 +44,10 @@ const JobAppliedSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
+    timestamps: true,
   }
 );
+
 
 const JobAppliedModel = mongoose.model("JobApplied", JobAppliedSchema);
 
