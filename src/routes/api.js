@@ -9,7 +9,7 @@ const { CreateGuardianProfile, GuardianLogin, SelectGuardianProfile, UpdateGuard
 const { CreateJobPost, GetAllJobPost, SelectJobPostById, UpdateJobPostById, DeleteJobPostById, GetJobPostsByDateRange, GetJobPostsByTuitionType, GetJobPostsBySubject, GetJobPostsByPreferredTeacherGender, GetJobPostsByPreferredStudentGender } = require('../controllers/JobPostController');
 const { GetAllUser, VerifyUser, UpdateRole, GetAllGuardian, GetAllTutor } = require('../controllers/AdminController');
 const { AddLocation, GetAllLocation, DeleteLocationById } = require('../controllers/LocationController');
-const { applyForJob, appointTutor, confirmTutor, getAllJobApplications } = require('../controllers/JobAppliedController');
+const { applyForJob, appointTutor, confirmTutor, getAllJobApplications, updateJobApplicationStatus, getApplicationsWithAppointedTutors, getApplicationsByStatus } = require('../controllers/JobAppliedController');
 
 
 
@@ -91,10 +91,15 @@ router.post("/applyForJob", AuthVerifyMiddleware, applyForJob);
 router.post("/appointTutor", AuthVerifyMiddleware, appointTutor);
 router.post("/confirmTutor", AuthVerifyMiddleware, confirmTutor);
 router.get("/getAllJobApplications", AuthVerifyMiddleware, getAllJobApplications);
+router.post("/updateJobApplicationStatus", AuthVerifyMiddleware, updateJobApplicationStatus);
+router.get("/getApplicationsWithAppointedTutors", AuthVerifyMiddleware, getApplicationsWithAppointedTutors);
+router.post("/getApplicationsByStatus", AuthVerifyMiddleware, getApplicationsByStatus);
 
 
 // OTP related api 
 // user related api 
 router.get('/UserOTP/:email', ProfileController.UserOTP);
+
+
 
 module.exports = router;

@@ -213,35 +213,134 @@ exports.getAllJobApplications = async (req, res) => {
 };
 
 
+const JobApplicationStatus = {
+  INITIAL_PENDING: "INITIAL_PENDING",
+  REVIEW_PENDING: "REVIEW_PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+};
+
+exports.updateJobApplicationStatus = async (req, res) => {
+  const { jobId, status } = req.body;
+  
+
+  try {
+    // Validate input
+    if (!jobId || !status) {
+      return res.status(400).json({
+        status: "fail",
+        message: "jobId and status are required.",
+      });
+    }
+
+    // Validate the status value
+    if (!Object.values(JobApplicationStatus).includes(status)) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid status value.",
+      });
+    }
+
+    // Find the job application
+    const jobApplication = await JobAppliedModel.findOne({ _id:jobId });
+
+    // Check if the job application exists
+    if (!jobApplication) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Job application not found.",
+      });
+    }
+
+    // Check if the current status is the same as the new status
+    if (jobApplication.status === status) {
+      return res.status(400).json({
+        status: "fail",
+        message: `Job application is already in ${status} status.`,
+      });
+    }
+
+    // Update the status
+    jobApplication.status = status;
+    await jobApplication.save();
+
+    res.status(200).json({
+      status: "success",
+      message: `Job application status updated to ${status} successfully.`,
+      data: jobApplication,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+exports.getApplicationsWithAppointedTutors = async (req, res) => {
+  try {
+    // Fetch job applications where appointedIds is not empty
+    const jobApplications = await JobAppliedModel.find({
+      appointedIds: { $ne: [] },
+    })
+      .populate('jobId') // Populate job details
+      .populate('appointedIds') // Populate appointed tutor details
+      .populate('tutorIds') // Populate tutor details
+      .populate('confirmedId'); // Populate confirmed tutor details
+
+    res.status(200).json({
+      status: "success",
+      message: "Job applications with appointed tutors fetched successfully.",
+      data: jobApplications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Server error while fetching job applications.",
+    });
+  }
+};
+
+
+exports.getApplicationsByStatus = async (req, res) => {
+  const { status } = req.body;
+
+  try {
+    // Validate the status input
+    if (!status) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Status query parameter is required.",
+      });
+    }
+
+    // Validate the status value
+    if (!Object.values(JobApplicationStatus).includes(status)) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid status value.",
+      });
+    }
+
+    // Fetch job applications with the specified status
+    const jobApplications = await JobAppliedModel.find({ status })
+      .populate('jobId') // Populate job details
+      .populate('appointedIds') // Populate appointed tutor details
+      .populate('tutorIds') // Populate tutor details
+      .populate('confirmedId'); // Populate confirmed tutor details
+
+    res.status(200).json({
+      status: "success",
+      message: `Job applications with status "${status}" fetched successfully.`,
+      data: jobApplications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Server error while fetching job applications.",
+    });
+  }
+};
 
 
 
-//   try {
-//     // Fetch job applications and populate fields
-//     const jobApplications = await JobAppliedModel.find()
-//       .populate('jobId') // Populate job details
-//       .populate('confirmedId') // Populate confirmed tutor info
-//       .populate('appointedIds') // Populate appointed tutors
-//       .populate('tutorIds') // Populate tutor IDs
-//       .lean(); // Converts documents to plain JavaScript objects for easier handling
-
-//     // Iterate through applications to fetch guardian info based on jobId.email
-//     for (let application of jobApplications) {
-//       if (application.jobId && application.jobId.email) {
-//         const guardianInfo = await GuardianProfileModel.findOne({ email: application.jobId.email });
-//         application.guardianInfo = guardianInfo; // Attach guardian info to each application
-//       }
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       data: jobApplications,
-//     });
-//   } catch (error) {
-//     console.error('Error fetching job applications:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Server error while fetching job applications',
-//     });
-//   }
-// };
