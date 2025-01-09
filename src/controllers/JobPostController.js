@@ -28,12 +28,12 @@ exports.CreateJobPost = async (req, res) => {
 
 
 exports.GetAllJobPost = async (req, res) => {
-  let email = req.headers['email'];
+  // let email = req.headers['email'];
 
   // console.log(email);
 
   try {
-    const data = await JobPostModel.find({ email });
+    const data = await JobPostModel.find();
     res.status(200).json({ status: 'success', data: data });
   } catch (err) {
     res.status(400).json({ status: "fail", data: err.message });
