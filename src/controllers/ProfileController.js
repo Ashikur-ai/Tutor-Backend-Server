@@ -3,6 +3,7 @@ const ProfileModel = require("../models/ProfileModel");
 let jwt = require('jsonwebtoken');
 const TutorProfileModel = require("../models/TutorProfileModel");
 const TutorAdditionalInfoModel = require("../models/TutorAdditionalInfoModel");
+const { UserOTPService } = require("../services/UserService");
 
 exports.CreateProfile = async (req, res) => {
   try {
@@ -129,3 +130,9 @@ exports.UpdateProfile = async (req, res) => {
   }
 };
 
+
+exports.UserOTP = async (req, res) => {
+  // console.log("hello from profile controller");
+  let result = await UserOTPService(req);
+  return res.status(200).json(result);
+}

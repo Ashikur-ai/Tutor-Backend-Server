@@ -92,4 +92,9 @@ router.post("/appointTutor", AuthVerifyMiddleware, appointTutor);
 router.post("/confirmTutor", AuthVerifyMiddleware, confirmTutor);
 router.get("/getAllJobApplications", AuthVerifyMiddleware, getAllJobApplications);
 
+
+// OTP related api 
+// user related api 
+router.get('/UserOTP/:email', ProfileController.UserOTP);
+
 module.exports = router;

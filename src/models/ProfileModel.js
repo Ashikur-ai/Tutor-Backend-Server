@@ -11,7 +11,8 @@ const DataSchema = mongoose.Schema(
     email: { type: String, unique: true },
     role: { type: String, enum: ['guardian', 'tutor', 'superadmin', 'admin', 'apointer', ''], default: '' }, 
     profilePic: {type: String},
-    verificationRequest: { type: Boolean, default: false } // Field to indicate if the user is verified, initially false
+    verificationRequest: { type: Boolean, default: false }, // Field to indicate if the user is verified, initially false
+    otp: { type: String }
   },
   {
     timestamps: true,
