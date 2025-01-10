@@ -344,3 +344,30 @@ exports.getApplicationsByStatus = async (req, res) => {
 
 
 
+exports.GetAppliedJobPostsByDateRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.body; // Fetch dates from the request body
+
+    // Validate input
+    if (!startDate || !endDate) {
+      return res.status(400).json({ status: 'fail', message: 'Both startDate and endDate are required' });
+    }
+
+    // Parse the dates to ensure proper handling
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ status: 'fail', message: 'Invalid date format' });
+    }
+
+    // Query the database for job posts within the date range
+    const data = await JobAppliedModel.find({
+      createdAt: { $gte: start, $lte: end }, // Assuming `createdAt` is a timestamp field
+    });
+
+    res.status(200).json({ status: 'success', data });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
